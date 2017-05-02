@@ -77,6 +77,25 @@
 	height: 46px;
 }
 
+#main-menu {
+	background-image: url(./back.jpg);
+	background-position: center top;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+#jumbo {
+	/*background-image: url(./logo_1.svg);*/
+	background-image: url(./logo_1_white_arrow.svg);
+	background-position: center top;
+	background-size: contain;
+	background-repeat: no-repeat;
+	/*background-attachment: fixed;*/
+}
+
+
+
 @media only screen and (max-width: 700px) {
 	.ui.fixed.menu {
 		display: none !important;
