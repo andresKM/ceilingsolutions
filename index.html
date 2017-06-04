@@ -10,14 +10,15 @@
 	<title>Натяжные потолки - ceilingsolutions.kiev.ua</title>
 	<link rel="stylesheet" type="text/css" href="dist/semantic.css">
 	<link rel="stylesheet" type="text/css" href="assets/main.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.min.css">
+
 	<script src="assets/jquery.min.js"></script>
 	<script src="dist/semantic.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.min.js"></script>
 	<script>
 	$(document).ready(function() {
-		// create sidebar and attach to menu open
-		$('.ui.sidebar').sidebar('attach events', '.toc.item');
-
-		$("#jumbo_button").click(function() {
+		
+		/*$("#jumbo_button").click(function() {
 			$("#jumbo").remove();
 			$(".masthead.segment").css("height", "80px");
 			$(".masthead.segment").css("min-height", "80px");
@@ -32,7 +33,9 @@
 				$(".masthead.segment").css("min-height", "80px");
 			}
 
-		});
+		});*/
+
+
 		$('.message .close').on('click', function() {
 			$(this).closest('.message').hide();
 			$(".ui.horizontal.divider").hide();
@@ -49,36 +52,14 @@
 		$("#how-to").on("click", function() {
 			$('#modal').modal('show');
 		});
+
+		$('#modal_viber').modal();
+		$("#button_viber").on("click", function() {
+			$('#modal_viber').modal('show');
+		});
 		
 
-		$.fn.submit_car = function() {
-			var qq = $("#car-form").form('get field', "search_car").val();
-			client.search({
-				"index": 'fsc',
-				q: "car_number:*" + qq + "*",
-				size: 1
-			}).then(function(body) {
-				var hits = body.hits.hits;
-				if (hits != "" && hits != "undefined" && hits != null) {
-					console.log(hits);
-					$("#results_table_car > table").remove();
-					$("#results_table_car > h4").remove();
-					$('#results_table_car').removeClass("loading");
-					$.fn.renderJson("#results_table_car", hits);
-				} else {
-					var text_message = $("<h4 class='ui header center aligned grey'>За Вашим запитом відсутня інформація. Перевірте запит та з'єднання з мережею. Спробуйте ще.</h4>");
-					$("#results_table_car > table").remove();
-					$("#results_table_car > h4").remove();
-					$('#results_table_car').removeClass("loading");
-					$(text_message).appendTo("#results_table_car");
-				}
-			}, function(error) {
-				console.trace(error.message);
-			});
 
-
-
-		};
 
 		$.fn.submit_ttn = function() {
 			var qq = $("#ttn-form").form('get field', "search_ttn").val();
@@ -106,165 +87,8 @@
 			});
 		};
 
-		$.fn.submit_birka = function() {
-			var qq = $("#birka-form").form('get field', "search_birka").val();
-			client.search({
-				index: 'fsc',
-				body: {
-					"query": {
-						"query_string": {
-							"fields": ["birka1", "birka2", "birka3", "birka4", "birka5"],
-							"query": "*" + qq + "*"
-						}
-					}
-				},
-				size: 1
-			}).then(function(body) {
-				var hits = body.hits.hits;
-				if (hits != "" && hits != "undefined" && hits != null) {
-					console.log(hits);
-					$("#results_table_birka > table").remove();
-					$("#results_table_birka > h4").remove();
-					$('#results_table_birka').removeClass("loading");
-					$.fn.renderJson("#results_table_birka", hits);
-				} else {
-					var text_message = $("<h4 class='ui header center aligned grey'>За Вашим запитом відсутня інформація. Перевірте запит та з'єднання з мережею. Спробуйте ще.</h4>");
-					$("#results_table_birka > table").remove();
-					$("#results_table_birka > h4").remove();
-					$('#results_table_birka').removeClass("loading");
-					$(text_message).appendTo("#results_table_birka");
-				}
-			}, function(error) {
-				console.trace(error.message);
-			});
-
-		};
-
-		
 		
 
-		$.fn.read_files = function(file_arr) { 
-			var return_file_arr;
-			file_arr.forEach (function (file, index, file_arr) {
-				var reader = new FileReader();
-				reader.readAsDataURL(file);
-				reader.onload = function() {
-					res = reader.result;
-					return_file_arr.push(res)
-				};
-
-			})
-			return return_file_arr;
-		}
-
-		
-		$.fn.submit_input = function() {
-			//console.log(qq);
-			//var myFile = $('#hidden-new-file').prop('files');
-			//console.log(myFile);
-			var file_bin = "";
-			var file_bin_2 = "";
-			//file_after_bin = Base64.encode64(file_after_bin);
-
-			if (!window.FileReader) {
-				alert('FileReader API не підтримується браузером.');
-			}
-			var $i1 = $('#hidden-new-file'), // Put file input ID here
-				input1 = $i1[0]; // Getting the element from jQuery
-
-			var $i2 = $('#hidden-new-file_2'), // Put file input ID here
-				input2 = $i2[0]; // Getting the element from jQuery
-			var file_arr = new Array();
-			file_arr.push(input1.files[0],input2.files[0]);
-			if ((input1.files && input1.files[0]) &&  (input2.files && input2.files[0])){
-				//$.fn.read_files ();
-				$.fn.submit_send($.fn.read_files (file_arr));
-
-			} else {
-				//alert("Файл не обрано або несумісний браузер.");
-				console.log("else clause in FileReader");
-				var text_message = $("<h4 class='ui header center aligned grey'>Файл не обрано або несумісний браузер. Перевірте форму вводу та з'єднання з мережею. Спробуйте ще.</h4>");
-				$("#results_table_input > table").remove();
-				$("#results_table_input > h4").remove();
-				$('#results_table_input').removeClass("loading");
-				$(text_message).appendTo("#results_table_input");
-			}
-		}
-
-
-		$.fn.submit_send = function(file_arr) {
-
-			console.log(file_arr);
-			client.index({
-				index: 'fsc',
-				type: 'eod',
-				body: {
-					date_send: $("#input-form").form('get field', "input-form-date_send").val(),
-					ttn: $("#input-form").form('get field', "input-form-ttn").val(),
-					transporter_fop: $("#input-form").form('get field', "input-form-transporter_fop").val(),
-					driver_pib: $("#input-form").form('get field', "input-form-driver_pib").val(),
-					car_number: $("#input-form").form('get field', "input-form-car_number").val(),
-					dest_place: $("#input-form").form('get field', "input-form-dest_place").val(),
-					arrival_place: $("#input-form").form('get field', "input-form-arrival_place").val(),
-					cargo_taker: $("#input-form").form('get field', "input-form-cargo_taker").val(),
-					sortument1: $("#input-form").form('get field', "input-form-sortument1").val(),
-					number1: $("#input-form").form('get field', "input-form-number1").val(),
-					volume1: $("#input-form").form('get field', "input-form-volume1").val(),
-					//birka1: $("#input-form").form('get field', "input-form-birka1").val(),
-					ttn_foto: "" + file_bin + "",
-					ttn_foto_2: "" + file_bin_2 + ""
-				}
-			}).then(function(body) {
-				console.log(body);
-				$("#results_table_input > table").remove();
-				$("#results_table_input > h4").remove();
-				$('#results_table_input').removeClass("loading");
-
-				if (body.created == true) {
-					var table = $('<table class="ui compact celled collapsing striped table results_table">');
-					var TableRow = "<tr>";
-					TableRow += "<td>ID документу в БД:</td>";
-					TableRow += "<td>" + body._id + "</td>";
-					TableRow += "</tr>";
-					TableRow += "<tr><td>Стан транзакції:</td>";
-					TableRow += "<td>" + body.result + "</td>";
-					TableRow += "</tr>";
-
-					$(table).append(TableRow);
-					$(table).appendTo("#results_table_input");
-					/*$.each(data, function(idx, obj) {
-						console.log(obj._source);
-						var table = $.fn.makeTable(obj._source);
-						$(table).appendTo(sel);
-					});*/
-				} else {
-					console.log("Fail");
-					var text_message = $("<h4 class='ui header center aligned grey'>За Вашим запитом відсутня інформація. Перевірте запит та з'єднання з мережею. Спробуйте ще.</h4>");
-					$("#results_table_input > table").remove();
-					$("#results_table_input > h4").remove();
-					$('#results_table_input').removeClass("loading");
-					$(text_message).appendTo("#results_table_input");
-				}
-			}, function(error) {
-				console.trace(error.message);
-				alert ("Перевірте запит та з'єднання з мережею. Спробуйте ще.");
-			});
-		}
-
-		$('#car-form .submit.button').on('click', function() {
-			$('#results_table_car').addClass("loading");
-			$.fn.submit_car();
-		});
-
-		$('#birka-form .submit.button').on('click', function() {
-			$('#results_table_birka').addClass("loading");
-			$.fn.submit_birka();
-		});
-
-		$('#ttn-form .submit.button').on('click', function() {
-			$('#results_table_ttn').addClass("loading");
-			$.fn.submit_ttn();
-		});
 
 
 		/*$('#input-form .submit.button').on('click', function() {
@@ -274,29 +98,7 @@
 
 
 
-		$('#car-form').form({
-			fields: {
-				search_car: {
-					identifier: 'search_car',
-					rules: [{
-						type: 'empty'
-					}]
-				}
-			}
-		});
-
-
-
-		$('#ttn-form').form({
-			fields: {
-				search_ttn: {
-					identifier: 'search_ttn',
-					rules: [{
-						type: 'empty'
-					}]
-				}
-			}
-		});
+		
 
 		$('#birka-form').form({
 			fields: {
@@ -404,137 +206,17 @@
 		});
 
 
-		$.fn.makeTable = function(mydata) {
-			var table = $('<table class="ui compact celled collapsing striped table results_table">');
-			// $.each(mydata, function(index, value) {
-			// 	var TableRow = "<tr>";
-			// 	$.each(value, function(key, val) {
-			// 		TableRow += "<td>" + val + "</td>";
-			// 	});
-			// 	TableRow += "</tr>";
-			// 	$(table).append(TableRow);
-			// });
-			var TableRow = "<tr>";
-			TableRow += "<td>Дата ТТН:</td>";
-			TableRow += "<td>" + mydata.date_send + "</td>";
-			TableRow += "</tr>";
-			TableRow += "<tr><td>Серія, номер ТТН:</td>";
-			TableRow += "<td>" + mydata.ttn + "</td>";
-			TableRow += "</tr>";
-			TableRow += "<tr><td>Вантажоперевізник:</td>";
-			TableRow += "<td>" + mydata.transporter_fop + "</td>";
-			TableRow += "</tr>";
-			TableRow += "<tr><td>Водій:</td>";
-			TableRow += "<td>" + mydata.driver_pib + "</td>";
-			TableRow += "</tr>";
-			TableRow += "<tr><td>Держ. номер авто:</td>";
-			TableRow += "<td>" + mydata.car_number + "</td>";
-			TableRow += "</tr>";
-			TableRow += "<tr><td>Пункт навантаження:</td>";
-			TableRow += "<td>" + mydata.dest_place + "</td>";
-			TableRow += "</tr>";
-			TableRow += "<tr><td>Пункт розвантаження:</td>";
-			TableRow += "<td>" + mydata.arrival_place + "</td>";
-			TableRow += "</tr>";
-			TableRow += "<tr><td>Вантажоодержувач</td>";
-			TableRow += "<td>" + mydata.cargo_taker + "</td>";
-			TableRow += "</tr>";
+		$('.fotorama').fotorama({
+		  height: '85%',
+		  /*maxwidth: '100%',*/
+		  ratio: 16/9,
+		  allowfullscreen: true,
+		  nav: 'thumbs',
+		  navposition:'bottom',
+		  loop:'true',
+		  keyboard:'true',
 
-			TableRow += "<tr><td>Сортимент, кількість, об'єм:</td>";
-			TableRow += "<td>" + mydata.sortument1 + "</td>";
-			TableRow += "<td>" + mydata.number1 + "</td>";
-			TableRow += "<td>" + mydata.volume1 + "</td>";
-			TableRow += "</tr>";
-
-			TableRow += "<tr><td>Номери бирок:</td>";
-			TableRow += "<td class='cell-wrap'>" + mydata.birka1 + "</td>";
-			TableRow += "</tr>";
-
-			if (mydata.number2 != "" && mydata.number2 != null) {
-				TableRow += "<tr><td>Сортимент, кількість, об'єм:</td>";
-				TableRow += "<td>" + mydata.sortument2 + "</td>";
-				TableRow += "<td>" + mydata.number2 + "</td>";
-				TableRow += "<td>" + mydata.volume2 + "</td>";
-				TableRow += "</tr>";
-
-				TableRow += "<tr><td>Номери бирок:</td>";
-				TableRow += "<td class='cell-wrap'>" + mydata.birka2 + "</td>";
-				TableRow += "</tr>";
-
-			} else {}
-
-
-			if (mydata.number3 != "" && mydata.number3 != null) {
-
-				TableRow += "<tr><td>Сортимент, кількість, об'єм:</td>";
-				TableRow += "<td>" + mydata.sortument3 + "</td>";
-				TableRow += "<td>" + mydata.number3 + "</td>";
-				TableRow += "<td>" + mydata.volume3 + "</td>";
-				TableRow += "</tr>";
-
-				TableRow += "<tr><td>Номери бирок:</td>";
-				TableRow += "<td class='cell-wrap'>" + mydata.birka3 + "</td>";
-				TableRow += "</tr>";
-
-			} else {}
-
-			if (mydata.number4 != "" && mydata.number4 != null) {
-
-				TableRow += "<tr><td>Сортимент, кількість, об'єм:</td>";
-				TableRow += "<td>" + mydata.sortument4 + "</td>";
-				TableRow += "<td>" + mydata.number4 + "</td>";
-				TableRow += "<td>" + mydata.volume4 + "</td>";
-				TableRow += "</tr>";
-
-				TableRow += "<tr><td>Номери бирок:</td>";
-				TableRow += "<td class='cell-wrap'>" + mydata.birka4 + "</td>";
-				TableRow += "</tr>";
-
-			} else {}
-
-			if (mydata.number5 != "" && mydata.number5 != null) {
-
-				TableRow += "<tr><td>Сортимент, кількість, об'єм:</td>";
-				TableRow += "<td>" + mydata.sortument5 + "</td>";
-				TableRow += "<td>" + mydata.number5 + "</td>";
-				TableRow += "<td>" + mydata.volume5 + "</td>";
-				TableRow += "</tr>";
-
-				TableRow += "<tr><td>Номери бирок:</td>";
-				TableRow += "<td class='cell-wrap'>" + mydata.birka5 + "</td>";
-				TableRow += "</tr>";
-
-			} else {}
-
-			if (mydata.ttn_foto != "" && mydata.ttn_foto != "undefined" && mydata.ttn_foto != null) {
-				var image = $('<img src="' + mydata.ttn_foto + '"  alt="Фото ТТН" class="cell-image">');
-				TableRow += "<tr><td>Фото ТТН:</td>";
-				TableRow += "<td class='cell-image-td'>" + image[0].outerHTML + "</td>";
-				TableRow += "</tr>";
-
-			} else {}
-
-			if (mydata.ttn_foto_2 != "" && mydata.ttn_foto_2 != "undefined" && mydata.ttn_foto_2 != null) {
-				var image = $('<img src="' + mydata.ttn_foto_2 + '"  alt="Інше Фото" class="cell-image">');
-				TableRow += "<tr><td>Інше Фото:</td>";
-				TableRow += "<td class='cell-image-td'>" + image[0].outerHTML + "</td>";
-				TableRow += "</tr>";
-
-			} else {}
-
-			$(table).append(TableRow);
-			return ($(table));
-		};
-
-		$.fn.renderJson = function(sel, data) {
-			//var mydata = eval(data);
-			$.each(data, function(idx, obj) {
-				console.log(obj._source);
-				var table = $.fn.makeTable(obj._source);
-				$(table).appendTo(sel);
-			});
-
-		};
+		});
 
 
 	});
@@ -543,38 +225,67 @@
 
 <body>
 	
-	<!-- Sidebar Menu -->
-	<!-- <div class="ui vertical inverted sidebar menu tabular" id="sidebar-menu"></div> -->
-
 	<div class="ui modal" id="modal">
 		<i class="close icon"></i>
-		<div class="header">
+		<!-- <div class="header">
 			Lorem
+		</div> -->
+		<div class="image content">
+			<div class="ui raised very padded text container segment">
+					<div class="ui form" id="input-form">
+						<h4 class="ui dividing header">CallBack</h4>
+						<div class="two fields">
+							<div class="field">
+								<label>Имя</label>
+								<input type="text" name="input-form-date_send" placeholder="Впишите Ваше Имя">
+							</div>
+							<div class="field">
+								<label>Телефон</label>
+								<input type="text" name="input-form-ttn" placeholder="+38(0XX)-123-45-67">
+							</div>
+						</div>
+						<div class="ui one column stackable center aligned grid">
+							<div class="one column wide row">
+								<button class="ui large blue submit button">
+									Отправить
+									<!-- <i class="right arrow icon"></i> -->
+								</button>
+							</div>
+						</div>
+						
+					</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui modal" id="modal_viber">
+		<i class="close icon"></i>
+		<div class="header">
+			Свяжитесь с нами
 		</div>
 		<div class="image content">
 			<div class="image">
-				<i class="question icon"></i>
+				<i class="talk outline icon"></i>
 			</div>
 			<div class="description">
-				<!-- <div class="ui bulleted animated big list" style="margin: 0 45px 20px;">
-					<div class="item">Пошук  по авто</div>
-					<div class="item">Пошук  по ТТН</div>
-					<div class="item">Пошук  по бирці</div>
-					<div class="item">Внести дані</div>
-				</div> -->
 				<!-- <p  style="font-size: 1.25em;text-indent: 1em;"> -->
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse tincidunt velit eu lacus laoreet, quis luctus elit pellentesque. Sed quam ipsum, finibus id mi in, ornare commodo arcu. Fusce lacinia mauris eget arcu maximus ornare quis eu nulla. Vivamus sit amet sagittis eros. Nulla facilisi. Donec pharetra ante a diam auctor vestibulum. Maecenas ut nunc in dolor pretium hendrerit. In a urna finibus, malesuada mi sit amet, mollis turpis. Aliquam pellentesque justo feugiat, blandit justo nec, ornare massa. Cras hendrerit gravida viverra. Nullam et lobortis tellus. Nullam in nibh leo. Curabitur congue accumsan leo at pharetra.
+				<p style="font-size: 1.25em;">Уже сейчас Вы можете связаться с нами в приложении Viber. 
 				</p>
-				<p>
-				Mauris facilisis turpis eget eleifend varius. Mauris vestibulum eu metus in pretium. Duis iaculis orci ac est aliquet vestibulum et et felis. Cras ultrices justo non nisl faucibus, sit amet rhoncus sem iaculis. Nulla facilisi. Sed ultricies, ex id placerat scelerisque, sem elit lacinia dui, a cursus turpis arcu eget leo. Vivamus placerat fermentum mauris, at porttitor dui ultrices ac. Morbi pretium tellus magna, eu faucibus nunc vulputate et. In ut purus eu ante facilisis mattis. Nulla eget aliquam urna, at eleifend enim. Mauris placerat tellus sed tellus vulputate, ac vestibulum purus pharetra.
+				<p style="font-size: 1.25em;">Отправляйте нам сообщения и мы с радостью ответим на интересующие Вас вопросы. 
 				</p>
-				<p>
-				Donec nec ultricies ipsum. Praesent in finibus nibh. Nullam sit amet massa nunc. Vestibulum quis tellus augue. Morbi tristique justo viverra ultricies auctor. In porttitor augue sit amet viverra vestibulum. Curabitur dictum pretium semper. Nunc quis turpis ut tortor convallis porta blandit in dui. In viverra pellentesque est, vitae rutrum ante imperdiet in. Quisque quis ipsum mauris. Morbi tincidunt nisl semper rhoncus egestas. Morbi eros mauris, tincidunt et mauris at, vulputate imperdiet ante. Aenean sed pretium neque.
+				<p style="font-size: 1.25em;">
+				Номер телефона в Viber : +38 (093) 425-35-00* 
+				</p>
+				<p style="font-size: 1.25em;">
+				*данный номер работает только на сообщения, без звонков, с 8:00 до 20:00
 				</p>
 				
 			</div>
 		</div>
 	</div>
+
+
+
 	<!-- Page Contents -->
 	<div class="pusher">
 		<div class="ui inverted vertical masthead center aligned segment" id="main-menu">
@@ -588,6 +299,9 @@
 							<!-- <i class="call icon"></i>	 -->
 							+38 (093) 425-35-00
 						</a>
+						<button class="ui button" id="button_viber">
+							<span class="text">Viber</span>
+						</button>
 					</div>
 
 					
@@ -598,11 +312,12 @@
 					<a class="right item">
 						<i class="white big facebook icon"></i>
 					</a>
-					<a class="right item">
+					<!-- <a class="right item">
 						<i class="white big vk icon"></i>
+					</a> -->
+					<a class="ui big inverted button" id="how-to" style="height: 52px;margin-top: 10px;line-height: 22px;">
+						Обратная связь
 					</a>
-						<a class="ui big inverted button" id="how-to" style="height: 52px;margin-top: 10px;line-height: 22px;">
-						Обратная связь</a>
 					</div>
 				</div>
 			</div>
@@ -612,181 +327,68 @@
 				</h1> -->
 				<!-- <div class="ui huge primary button" id="jumbo_button">Розпочати <i class="right arrow icon"></i></div> -->
 			</div>
+
+
+
+
+			
+
+
+
+
+
 		</div>
-		<div class="ui tab" data-tab="tab-car">
-			<div class="ui raised very padded text container segment">
-				<div class="ui huge form" id="car-form">
-					<div class="field">
-						<label>Введіть номер авто для перевірки</label>
-						<input placeholder="Введіть Ваш запит" type="text" name="search_car">
+		
+
+
+
+
+		<div class="ui equal width grid container" style="margin-top: 20px;">
+			<div class="three column centered row">
+				<div class="three wide column">
+					<div class="ui center aligned segment"> 
+						<i class="massive line chart blue icon"></i>
+						<p class="centered">
+						Большой опыт
+						</p>
 					</div>
-					<div class="ui large blue submit button">
-						<i class="search icon"></i> Пошук
-					</div>
-					<div class="ui large yellow right floated clear button">Cкинути</div>
 				</div>
-			</div>
-			<div class="ui raised text padded container segment" id="results_table_car">
-				<h4 class="ui header center aligned grey">
-					Тут будуть відображені результати пошуку
-				</h4>
-			</div>
-		</div>
-		<div class="ui tab" data-tab="tab-ttn">
-			<div class="ui raised very padded text container segment">
-				<div class="ui huge form" id="ttn-form">
-					<div class="field">
-						<label>Введіть номер ТТН для перевірки</label>
-						<input placeholder="Введіть Ваш запит" type="text" name="search_ttn">
+
+				<div class="three wide column">
+					<div class="ui center aligned segment"> 
+						<i class="massive checked calendar green icon" style="margin-right: -0.7rem;"></i>
+						<p class="centered">
+						Индивидуальный подход
+						</p>
 					</div>
-					<div class="ui large blue submit button">
-						<i class="search icon"></i> Пошук
-					</div>
-					<div class="ui large yellow right floated clear button">Cкинути</div>
 				</div>
-			</div>
-			<div class="ui raised text padded container segment" id="results_table_ttn">
-				<h4 class="ui header center aligned grey">
-					Тут будуть відображені результати пошуку
-				</h4>
-			</div>
-		</div>
-		<div class="ui tab" data-tab="tab-birka">
-			<div class="ui raised very padded text container segment">
-				<div class="ui huge form" id="birka-form">
-					<div class="field">
-						<label>Введіть номер бирки для перевірки</label>
-						<input placeholder="Введіть Ваш запит" type="text" name="search_birka">
+				
+				<div class="three wide column">
+					<div class="ui center aligned segment"> 
+						<i class="massive trophy yellow icon"></i>
+						<p class="centered">
+						Высокое качество
+						</p>
 					</div>
-					<div class="ui large blue submit button">
-						<i class="search icon"></i> Пошук
-					</div>
-					<div class="ui large yellow right floated clear button">Cкинути</div>
 				</div>
-			</div>
-			<div class="ui raised text padded container segment" id="results_table_birka">
-				<h4 class="ui header center aligned grey">
-					Тут будуть відображені результати пошуку
-				</h4>
+				
+			  </div>
+		</div>
+
+		<div class="ui divider"></div>
+
+		<div class="ui ui two column centered grid" style="margin-bottom: 20px;">
+			<div class="fotorama">
+				<img src="https://www.dropbox.com/s/13tq4u15i36ivod/7.jpg?dl=1">
+				<img src="https://www.dropbox.com/s/62zizhjsum8of84/17.jpg?dl=1">
+				<img src="https://www.dropbox.com/s/iaxb7owm1ji8inr/14_2.jpg?dl=1">
 			</div>
 		</div>
-		<div class="ui tab" data-tab="tab-input">
-			<div class="ui raised very padded text container segment">
-				<div class="ui form" id="input-form">
-					<h4 class="ui dividing header">Дані по ТТН-ліс</h4>
-					<div class="two fields">
-						<div class="field">
-							<label>Дата ТТН</label>
-							<input type="text" name="input-form-date_send" placeholder="4/15/2015 12:00">
-						</div>
-						<div class="field">
-							<label>Серія, номер ТТН</label>
-							<input type="text" name="input-form-ttn" placeholder="ООО000220">
-						</div>
-					</div>
-					<div class="field">
-						<label>Вантажоперевізник</label>
-						<div class="field">
-							<input type="text" name="input-form-transporter_fop" placeholder="Введіть назву/ПІБ">
-						</div>
-					</div>
-					<div class="field">
-						<label>Водій</label>
-						<select class="ui fluid dropdown" name="input-form-driver_pib">
-							<option value="">Оберіть водія</option>
-							<option value="Савицький Костянтин Павлович">Савицький Костянтин Павлович</option>
-							<option value="Бутько Ростислав Федорович">Бутько Ростислав Федорович</option>
-							<option value="Гриневський Ілля Андрійович">Гриневський Ілля Андрійович</option>
-							<option value="Бердник Валерій Олександрович">Бердник Валерій Олександрович</option>
-							<option value="Ломовий Сергій Миколайович">Ломовий Сергій Миколайович</option>
-							<option value="Чорний Орест Станіславович">Чорний Орест Станіславович</option>
-							<option value="Родименко Петро Васильвич">Родименко Петро Васильвич</option>
-							<option value="Горбач Ярослав Андрійович">Горбач Ярослав Андрійович</option>
-						</select>
-					</div>
-					<div class="field">
-						<label>Держ. номер авто</label>
-						<div class="field">
-							<input type="text" name="input-form-car_number" placeholder="Введіть номер авто">
-						</div>
-					</div>
-					<div class="field">
-						<label>Пункт навантаження</label>
-						<div class="field">
-							<input type="text" name="input-form-dest_place" placeholder="Введіть пункт навантаження">
-						</div>
-					</div>
-					<div class="field">
-						<label>Пункт розвантаження</label>
-						<div class="field">
-							<input type="text" name="input-form-arrival_place" placeholder="Введіть пункт розвантаження">
-						</div>
-					</div>
-					<div class="field">
-						<label>Вантажоодержувач</label>
-						<div class="field">
-							<input type="text" name="input-form-cargo_taker" placeholder="Введіть назву/ПІБ">
-						</div>
-					</div>
-					<div class="fields">
-						<div class="seven wide field">
-							<label>Сортимент</label>
-							<input type="text" name="input-form-sortument1" maxlength="16" placeholder="Сортимент">
-						</div>
-						<div class="three wide field">
-							<label>Кількість</label>
-							<input type="text" name="input-form-number1" maxlength="3" placeholder="Кількість">
-						</div>
-						<div class="six wide field">
-							<label>Об'єм</label>
-							<div class="field">
-								<input type="text" name="input-form-volume1" maxlength="4" placeholder="Об'єм">
-							</div>
-						</div>
-					</div>
-					<!-- <div class="field">
-						<label>Номери бирок</label>
-						<div class="field">
-							<textarea rows="3" name="input-form-birka1" placeholder="Введіть номери бирок"></textarea>
-						</div>
-					</div> -->
-					<!-- <div class="four wide centered field">
-							<label for="file" class="ui icon button" id="new-file">
-								<i class="file icon"></i> Додати фото ТТН
-							</label>
-						</div> -->
-					<div class="field">
-						<label for="file" style="/*float: left;width: 180px;margin: 1em 0em 1rem 0em;*/" id="new-file">
-							<i class="file icon"></i> Додати фото ТТН
-						</label>
-						<input type="file" accept="image/jpeg,image/png" name="input-form-ttn_foto" class="ui button" id="hidden-new-file" style="/*display: none;*/">
-					</div>
-					<div class="field">
-						<label for="file" style="/*float: left;width: 180px;margin: 1em 0em 1rem 0em;*/" id="new-file_2">
-							<i class="file icon"></i> Додати інше фото
-						</label>
-						<input type="file" accept="image/jpeg,image/png" name="input-form-ttn_foto_2" class="ui button" id="hidden-new-file_2" style="/*display: none;*/">
-					</div>
-					<div class="inline field">
-						<div class="ui checkbox">
-							<input name="terms" type="checkbox">
-							<label>Погоджуюся з правильністю введених даних</label>
-						</div>
-					</div>
-					<div class="ui large blue submit button">
-						Внести дані
-						<!-- <i class="right arrow icon"></i> -->
-					</div>
-					<div class="ui large yellow right floated clear button">Cкинути</div>
-				</div>
-			</div>
-			<div class="ui raised text padded container segment" id="results_table_input">
-				<h4 class="ui header center aligned grey">
-					Тут будуть відображені результати пошуку
-				</h4>
-			</div>
-		</div>
-		<div class="ui grid container " id="dumb_content">
+
+
+
+
+		<div class="ui grid container " id="about_us">
 			<h3 class="ui header">Коротко про нас</h3>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse tincidunt velit eu lacus laoreet, quis luctus elit pellentesque. Sed quam ipsum, finibus id mi in, ornare commodo arcu. Fusce lacinia mauris eget arcu maximus ornare quis eu nulla. Vivamus sit amet sagittis eros. Nulla facilisi. Donec pharetra ante a diam auctor vestibulum. Maecenas ut nunc in dolor pretium hendrerit. In a urna finibus, malesuada mi sit amet, mollis turpis. Aliquam pellentesque justo feugiat, blandit justo nec, ornare massa. Cras hendrerit gravida viverra. Nullam et lobortis tellus. Nullam in nibh leo. Curabitur congue accumsan leo at pharetra.
 			</p>
@@ -797,27 +399,6 @@
 			Donec nec ultricies ipsum. Praesent in finibus nibh. Nullam sit amet massa nunc. Vestibulum quis tellus augue. Morbi tristique justo viverra ultricies auctor. In porttitor augue sit amet viverra vestibulum. Curabitur dictum pretium semper. Nunc quis turpis ut tortor convallis porta blandit in dui. In viverra pellentesque est, vitae rutrum ante imperdiet in. Quisque quis ipsum mauris. Morbi tincidunt nisl semper rhoncus egestas. Morbi eros mauris, tincidunt et mauris at, vulputate imperdiet ante. Aenean sed pretium neque.
 			</p>
 
-
-			<div class="equal width row">
-				<div class="column">
-					<i class="huge checked calendar icon"></i>
-					<p class="centered">
-					Индивидуальный подход
-					</p>
-				</div>
-				<div class="column">
-					<i class="huge line chart icon"></i>
-					<p>
-					Большой опыт
-					</p>
-				</div>
-				<div class="column">
-					<i class="huge trophy icon"></i>
-					<p>
-					Высокое качество
-					</p>
-				</div>
-			  </div>
 
 			<!-- <h4 class="ui horizontal header divider">
 						<a href="#">ДО УВАГИ</a>
