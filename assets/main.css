@@ -78,8 +78,8 @@
 }
 
 #main-menu {
-	background-image: url(./back.jpg);
-	background-position: center top;
+	background-image: url(./back_v2.jpg);
+	background-position: center center;
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
